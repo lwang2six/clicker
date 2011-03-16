@@ -1,0 +1,15 @@
+<h1> List of Questions</h1>
+<h2> for Problem Set #<%= @problem_set.id %>: <%= @problem_set.title %></h2>
+<br/>
+<h3>Questions</h3>
+<ol>
+<% @questions.each do |question| %>
+  <li><%= question.problem %></li>
+<% end %>
+</ol>
+
+
+<br />
+<%= link_to 'Begin the problem set', problem_set_question_path(@problem_set.id, @questions[0].count) %> |
+<%= link_to 'New Question', new_problem_set_question_path %> | 
+<%= link_to 'Back to Problem Set', problem_set_path(@problem_set) %>

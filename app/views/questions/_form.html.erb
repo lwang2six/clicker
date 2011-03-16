@@ -1,0 +1,41 @@
+<%= form_for([@problem_set, @question]) do |f| %>
+  <% if @question.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@question.errors.count, "error") %> prohibited this question from being saved:</h2>
+
+      <ul>
+      <% @question.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="field">
+    <%= f.label :problem %><br />
+    <%= f.text_field :problem %>
+  </div>
+
+
+  <% if @answer %>
+    <% @answer.each_with_index do |a, i| %>
+      <div class="field">
+        <label>answer <%= i+1 %></label>
+        <input id="answer_<%= i+1 %>" name="answer<%= i+1 %>[answer]" size="30" value="<%= a.answer %>" type="text" />
+        <input type="checkbox" name="answer<%= i+1 %>[correct]" value="<%= a.correct %>" <% if a.correct%> checked <% end %> >
+      </div>
+    <% end %>
+  <% else %>
+    <% for i in 1..4 %>
+      <div class="field">
+      <label>answer <%= i %></label>
+      <input id="answer_<%= i %>" name="answer<%= i %>[answer]" size="30" type="text" />
+      <input type="checkbox" name="answer<%= i %>[correct]" value="true">
+     </div>
+    <% end %>
+  <% end %>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>  

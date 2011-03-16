@@ -1,0 +1,23 @@
+<h1>Listing of all Problem Sets</h1>
+
+<table>
+  <tr>
+    <th>Title</th>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @problem_sets.each do |problem_set| %>
+  <tr>
+    <td><%= problem_set.title %></td>
+    <td><%= link_to 'Show', problem_set %></td>
+    <td><%= link_to 'Edit', edit_problem_set_path(problem_set) %></td>
+    <td><%= link_to 'Destroy', problem_set, :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Problem set', new_problem_set_path %>

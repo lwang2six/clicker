@@ -1,0 +1,22 @@
+<h1>Listing responses</h1>
+
+<table>
+  <tr>
+    <th></th>
+    <th></th>
+    <th></th>
+  </tr>
+
+<% @responses.each do |response| %>
+  <tr>
+    <td><%= response.answer_id %></td>
+    <td><%= link_to 'Show', problem_set_question_response_path(@problem_set.id, params[:question_id], response.id) %></td>
+    <td><%= link_to 'Edit', edit_problem_set_question_response_path(@problem_set.id, @question.id, response) %></td>
+    <td><%= link_to 'Destroy', [@problem_set, @question, response], :confirm => 'Are you sure?', :method => :delete %></td>
+  </tr>
+<% end %>
+</table>
+
+<br />
+
+<%= link_to 'New Response', new_problem_set_question_response_path %>

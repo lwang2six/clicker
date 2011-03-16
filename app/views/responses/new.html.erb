@@ -1,0 +1,6 @@
+<h1> Problem Set <%= @problem_set.id %> </h1>
+<h2>Question #<%= params[:question_id]%>: <%= @question.problem %></h2>
+
+<%= render 'form' %>
+
+<%= link_to 'Back', problem_set_question_responses_path %>

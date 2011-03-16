@@ -1,0 +1,15 @@
+<p id="notice"><%= notice %></p>
+
+
+  <h2>Title: <%= @problem_set.title %></h2>
+
+
+<p>
+  <strong>Summary:</strong><br/>
+  <em><%= @problem_set.summary %></em>
+</p>
+
+<%= link_to 'The Questions', problem_set_questions_path(@problem_set) %> <br/><br/>
+
+<%= link_to 'Edit', edit_problem_set_path(@problem_set) %> |
+<%= link_to 'Back', problem_sets_path %>
