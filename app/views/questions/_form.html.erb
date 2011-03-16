@@ -26,6 +26,15 @@
 <%= a.correct %>lkj
       </div>
     <% end %>
+    <% if @answer.size < 4 %>
+      <% for i in @answer.size+1..4 %>
+        <div class="field">
+          <label>answer <%= i %></label>
+          <input id="answer_<%= i %>" name="answer<%= i %>[answer]" size="30" type="text" />
+          <input type="checkbox" name="answer<%= i %>[correct]" value="true">
+        </div>
+      <% end %>
+    <% end %>
   <% else %>
     <% for i in 1..4 %>
       <div class="field">

@@ -1,0 +1,23 @@
+<%= @problem_set %><br/>
+
+
+<% @result.each  do |r| %>
+  <strong>Question #<%= r[:question].count%></strong>
+  <ol type = 'a'>
+  <% for i in r[:answers] %>
+    <li><%= i.answer %>
+        <%= r[:response].answer_id%>
+        <%= i.id %>
+        <% if r[:response].answer_id == i.id %>
+          <% if r[:response].result %>
+            Correct!
+          <% else %>
+            Wrong!!!!!!!!
+          <% end %>
+        <% end %>
+    </li>
+  <% end %>
+  </ol>
+<br/>
+<% end %>
+

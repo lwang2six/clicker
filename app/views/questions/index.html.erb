@@ -18,5 +18,5 @@
 <% if @questions.size > 0 %>
 <%= link_to 'Begin the problem set', problem_set_question_path(@problem_set.id, @questions[0].count) %> |
 <% end %>
-<%= link_to 'New Question', new_problem_set_question_path %> | 
-<%= link_to 'Back to Problem Set', problem_set_path(@problem_set) %>
+
+<%= render "foot" %>

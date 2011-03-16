@@ -1,0 +1,22 @@
+<%= form_for(@problem_set) do |f| %>
+  <% if @problem_set.errors.any? %>
+    <div id="error_explanation">
+      <h2><%= pluralize(@problem_set.errors.count, "error") %> prohibited this problem_set from being saved:</h2>
+
+      <ul>
+      <% @problem_set.errors.full_messages.each do |msg| %>
+        <li><%= msg %></li>
+      <% end %>
+      </ul>
+    </div>
+  <% end %>
+
+  <div class="fields">
+    <label> Please enter User ID before you begin</label>
+    <input id="user_id" name="user_id" size="30" type="text" value="">
+  </div>
+
+  <div class="actions">
+    <%= f.submit %>
+  </div>
+<% end %>

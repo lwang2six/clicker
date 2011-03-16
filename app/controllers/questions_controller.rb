@@ -4,8 +4,7 @@ class QuestionsController < ApplicationController
   def index
     @questions = Question.where(:problem_set_id => params[:problem_set_id]).all
     @problem_set = ProblemSet.find(params[:problem_set_id])
-    #puts problem_set_url
-    puts "weee"
+
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @questions }
@@ -15,15 +14,18 @@ class QuestionsController < ApplicationController
   # GET /questions/1
   # GET /questions/1.xml
   def show
-    @question = Question.where(:problem_set_id => params[:problem_set_id], :count => params[:id]).first
-    @problem_set = ProblemSet.find(params[:problem_set_id])
-    puts @problem_set.methods
-    @answer = Answer.where(:question_id => @question.id).all
-    @response = Response.new
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @question }
-    end
+      if not session[:user_id]
+        session[:prob_id] = params[:problem_set_id]
+        session[:ques_id] = params[:id]
+      end
+      @question = Question.where(:problem_set_id => params[:problem_set_id], :count => params[:id]).first
+      @problem_set = ProblemSet.find(params[:problem_set_id])
+      @answer = Answer.where(:question_id => @question.id).all
+      @response = Response.new
+      respond_to do |format|
+        format.html # show.html.erb
+        format.xml  { render :xml => @question }
+      end
   end
 
   # GET /questions/new
@@ -42,7 +44,7 @@ class QuestionsController < ApplicationController
   def edit
     @problem_set = ProblemSet.find(params[:problem_set_id])
     @question = Question.where(:count => params[:id], :problem_set_id => params[:problem_set_id]).first
-    puts @question.id
+
     @answer = Answer.where(:question_id => @question.id).all
   end
 
@@ -125,9 +127,8 @@ class QuestionsController < ApplicationController
   def update
     @problem_set = ProblemSet.find(params[:problem_set_id])
     @question = Question.where(:id => params[:id], :problem_set_id => params[:problem_set_id]).first
-    puts @question.count
     @answers = Answer.where(:question_id => @question.id)
-    @answer = @answers[0]
+
     ans = [:answer1, :answer2, :answer3, :answer4]
     respond_to do |format|
       if @question.update_attributes(params[:question])
@@ -138,7 +139,15 @@ class QuestionsController < ApplicationController
           a.save
         end
 
-
+        if @answers.size < 4 and params[ans[@answers.size]][:answer] != ""
+          for i in @answers.size..4
+            if params[ans[i]][:answer] != ""
+              a = Answer.new(params[ans[i-1]])
+              a.question_id = @question.id
+              a.save
+            end
+          end
+        end
         format.html { redirect_to(edit_problem_set_question_path(@problem_set.id, @question.count), :notice => 'Question was successfully updated.') }
         format.xml  { head :ok }
       else

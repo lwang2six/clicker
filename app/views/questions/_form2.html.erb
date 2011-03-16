@@ -11,13 +11,26 @@
     </div>
   <% end %>
  
-  <% @answer.each_with_index do |a, i| %>
-  <div class="fields">
-    <input id="answer_<%= i %>" name="response" size="30" type="radio" value="<%= a.id %>"> <%= a.answer %>
-  </div>
+  <% if session[:user_id] %>
+    <% @answer.each_with_index do |a, i| %>
+      <div class="fields">
+        <input id="answer_<%= i %>" name="response" size="30" type="radio" value="<%= a.id %>"> <%= a.answer %>
+      </div>
+    <% end %>
+
+    <br />
+    <div class="actions">
+      <%= f.submit "Submit Answer" %>
+    </div>
+  <% else %>
+
+    <div class="field">
+      <label> Please enter User ID for the quiz</label>
+      <input id="user_id" name="user_id" size="30" value="" type="text" />
+    </div>
+    <br/>
+    <div class="actions">
+      <%= f.submit "Submit User ID" %>
+    </div>
   <% end %>
-  <br />
-  <div class="actions">
-    <%= f.submit "Submit Answer" %>
-  </div>
 <% end %>

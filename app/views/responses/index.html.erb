@@ -10,6 +10,7 @@
 <% @responses.each do |response| %>
   <tr>
     <td><%= response.answer_id %></td>
+    <td><%= response.question_id %></td>
     <td><%= link_to 'Show', problem_set_question_response_path(@problem_set.id, params[:question_id], response.id) %></td>
     <td><%= link_to 'Edit', edit_problem_set_question_response_path(@problem_set.id, @question.id, response) %></td>
     <td><%= link_to 'Destroy', [@problem_set, @question, response], :confirm => 'Are you sure?', :method => :delete %></td>

@@ -3,8 +3,12 @@
 <p>
   <b>Question #<%= @question.count %>:</b>
   <%= @question.problem %><br/>
-
-  <%= render 'form2' %>
+  <% if session[:user_id] %>
+    <%= render 'form2' %>
+  <% else %>
+    <%= render 'login_form' %>
+  <% end %>
 </p>
 
-<%= link_to 'Back', problem_set_questions_path %>
+<br/>
+<%= render "foot" %>

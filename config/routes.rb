@@ -65,4 +65,6 @@ Clicker::Application.routes.draw do
     end
   end
 
+
+  match "problem_sets/:id/result/" => "problem_sets#result"
 end

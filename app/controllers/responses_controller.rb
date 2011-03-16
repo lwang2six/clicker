@@ -3,8 +3,8 @@ class ResponsesController < ApplicationController
   # GET /responses.xml
   def index
     @problem_set = ProblemSet.find(params[:problem_set_id])
-    @question = Question.where(:problem_set_id => @problem_set.id)[params[:question_id].to_i - 1]
-    @responses = Response.all
+    @question = Question.where(:problem_set_id => @problem_set.id, :count => params[:question_id].to_i).first
+    @responses = Response.where(:question_id => @question.id)
 
     respond_to do |format|
       format.html # index.html.erb
@@ -16,11 +16,10 @@ class ResponsesController < ApplicationController
   # GET /responses/1.xml
   def show
     @problem_set = ProblemSet.find(params[:problem_set_id])
-    @question = Question.where(:problem_set_id => @problem_set.id).first
+    @question = Question.where(:problem_set_id => @problem_set.id, :count=> params[:question_id].to_i).first
     @response = Response.find(params[:id])
     @answer = Answer.find(@response.answer_id)
-    
-#@answer = Answer.where(:id => @response.answer_id).first
+
     respond_to do |format|
       format.html # show.html.erb
       format.xml  { render :xml => @response }
@@ -52,24 +51,31 @@ class ResponsesController < ApplicationController
   # POST /responses
   # POST /responses.xml
   def create
-    @problem_set = ProblemSet.find(params[:problem_set_id])  
-    @question = Question.find(params[:question_id])
-    @answer = Answer.find(params[:response])
-    @response = Response.new( :answer_id => @answer.id, :result => @answer.correct, :question_id => @question.id)  
-    
-    if @problem_set.question_count > @question.count
-        next_question = Question.where(:problem_set_id => @problem_set.id, :count => @question.count + 1).first
-        result = problem_set_question_path(@problem_set, next_question)
+    if not session[:user_id]
+      session[:user_id] = params[:user_id]
+      respond_to do |format|
+        format.html { redirect_to(problem_set_question_path(session[:prob_id], session[:ques_id])) }
+      end
     else
-        result = @problem_set
-    end
-    respond_to do |format|
-      if @response.save
-        format.html { redirect_to(result, :notice => 'Response was successfully created.') }
-        format.xml  { render :xml => @response, :status => :created, :location => @response }
+      @problem_set = ProblemSet.find(params[:problem_set_id])  
+      @question = Question.find(params[:question_id])
+      @answer = Answer.find(params[:response])
+      @response = Response.new( :answer_id => @answer.id, :result => @answer.correct, :question_id => @question.id, :user_id => session[:user_id])    
+    
+      if @problem_set.question_count > @question.count
+        next_question = Question.where(:problem_set_id => @problem_set.id, :count => @question.count + 1).first
+        result = problem_set_question_path(@problem_set.id, next_question.count)
       else
-        format.html { render :action => "new" }
-        format.xml  { render :xml => @response.errors, :status => :unprocessable_entity }
+        result = @problem_set
+      end
+      respond_to do |format|
+        if @response.save
+          format.html { redirect_to(result, :notice => 'Response was successfully created.') }
+          format.xml  { render :xml => @response, :status => :created, :location => @response }
+        else
+          format.html { render :action => "new" }
+          format.xml  { render :xml => @response.errors, :status => :unprocessable_entity }
+        end
       end
     end
   end
