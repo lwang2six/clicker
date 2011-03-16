@@ -97,10 +97,23 @@ class ProblemSetsController < ApplicationController
       @result[i] = {}
       @result[i][:question] = q
       @result[i][:answers] = Answer.where(:question_id => q.id)
+      total = {}
+      res = Response.where(:question_id => q.id)
+      @result[i][:answers].each_with_index do |a, j|
+        total[j] = res.where(:answer_id => a.id).size
+      end
+      @result[i][:total] = total
       @result[i][:response] = Response.where(:user_id => session[:user_id], :question_id => q.id).first
     end
 
-     render :action => "result" 
+    #user_id hardcoded, TODO:// create user model 
+    if @result[0][:response].nil? && session[:user_id] != '126126126126126'
+      respond_to do |format|
+         format.html { redirect_to(problem_set_question_path(@problem_set.id, 1), :notice => "Must take the quiz first to see the results!!!") }
+      end
+    else
+      render :action => "result" 
+    end
 
   end
 
