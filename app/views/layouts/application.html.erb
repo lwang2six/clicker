@@ -7,6 +7,8 @@
   <%= csrf_meta_tag %>
 </head>
 <body>
+<% if session[:user_id] %> Hi User <%= session[:user_id] %>. <br/>Click to <%= link_to 'Logout', '/logout/' %>
+<% end %>
 
 <%= yield %>
 
