@@ -42,7 +42,8 @@ class QuestionsController < ApplicationController
   def edit
     @problem_set = ProblemSet.find(params[:problem_set_id])
     @question = Question.where(:count => params[:id], :problem_set_id => params[:problem_set_id]).first
-    @answer = Answer.where(:question_id => params[:id]).all
+    puts @question.id
+    @answer = Answer.where(:question_id => @question.id).all
   end
 
   # POST /questions
@@ -124,11 +125,21 @@ class QuestionsController < ApplicationController
   def update
     @problem_set = ProblemSet.find(params[:problem_set_id])
     @question = Question.where(:id => params[:id], :problem_set_id => params[:problem_set_id]).first
-    @answer = Answer.where(:question_id => params[:id]).first
-
+    puts @question.count
+    @answers = Answer.where(:question_id => @question.id)
+    @answer = @answers[0]
+    ans = [:answer1, :answer2, :answer3, :answer4]
     respond_to do |format|
       if @question.update_attributes(params[:question])
-        format.html { redirect_to(@question, :notice => 'Question was successfully updated.') }
+        
+        @answers.each_with_index do |a, i|
+          a.answer = params[ans[i]][:answer]
+          a.correct = params[ans[i]][:correct]
+          a.save
+        end
+
+
+        format.html { redirect_to(edit_problem_set_question_path(@problem_set.id, @question.count), :notice => 'Question was successfully updated.') }
         format.xml  { head :ok }
       else
         format.html { render :action => "edit" }

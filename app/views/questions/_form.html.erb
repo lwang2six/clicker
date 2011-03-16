@@ -22,7 +22,8 @@
       <div class="field">
         <label>answer <%= i+1 %></label>
         <input id="answer_<%= i+1 %>" name="answer<%= i+1 %>[answer]" size="30" value="<%= a.answer %>" type="text" />
-        <input type="checkbox" name="answer<%= i+1 %>[correct]" value="<%= a.correct %>" <% if a.correct%> checked <% end %> >
+        <input type="checkbox" name="answer<%= i+1 %>[correct]" value="true" <% if a.correct%> checked <% end %> >
+<%= a.correct %>lkj
       </div>
     <% end %>
   <% else %>

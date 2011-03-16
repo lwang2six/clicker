@@ -5,7 +5,7 @@
   <h3>Questions</h3>
   <ol>
     <% @questions.each do |question| %>
-      <li><%= question.problem %></li>
+      <li><%= question.problem %> <%= question.id %></li>
     <% end %>
   </ol>
 <% else %>
