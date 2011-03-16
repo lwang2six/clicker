@@ -15,6 +15,7 @@ class ProblemSetsController < ApplicationController
   def show
     @problem_set = ProblemSet.find(params[:id])
     @questions = Question.where(:problem_set_id => @problem_set.id)
+@question = Question.where(:problem_set_id => @problem_set.id).first
 
     respond_to do |format|
       format.html # show.html.erb
