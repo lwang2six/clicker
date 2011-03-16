@@ -1,5 +1,5 @@
-<%= @problem_set %><br/>
-
+<h1>Problem Set#<%= @problem_set.id %> "<%= @problem_set.title %>" Results</h1>
+<h3>for User #<%= session[:user_id] %></h3>
 
 <% @result.each  do |r| %>
   <strong>Question #<%= r[:question].count%></strong>
@@ -21,3 +21,4 @@
 <br/>
 <% end %>
 
+<%= render "foot" %>

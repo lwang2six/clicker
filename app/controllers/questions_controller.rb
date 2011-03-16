@@ -19,12 +19,20 @@ class QuestionsController < ApplicationController
         session[:ques_id] = params[:id]
       end
       @question = Question.where(:problem_set_id => params[:problem_set_id], :count => params[:id]).first
-      @problem_set = ProblemSet.find(params[:problem_set_id])
-      @answer = Answer.where(:question_id => @question.id).all
-      @response = Response.new
-      respond_to do |format|
-        format.html # show.html.erb
-        format.xml  { render :xml => @question }
+      if @question.nil?
+        flash[:notice] = "NO SUCH QUESTION!"
+        redirect_to :action=>"index"
+      else
+        @problem_set = ProblemSet.find(params[:problem_set_id])
+        @answer = Answer.where(:question_id => @question.id).all
+        @response = Response.where(:user_id => session[:user_id], :question_id => @question.id).first
+        if @response.nil?
+          @response = Response.new
+        end
+        respond_to do |format|
+          format.html # show.html.erb
+          format.xml  { render :xml => @question }
+        end
       end
   end
 
@@ -162,7 +170,6 @@ class QuestionsController < ApplicationController
   def destroy
     @problem_set = ProblemSet.find(params[:problem_set_id])
     @question = Question.where(:id => params[:id], :problem_set_id => params[:problem_set_id]).first
-    #@question = Question.find(params[:id])
     @answer = Answer.where(:question_id => params[:id]).all
     @answer.each do |a|
       a.destroy

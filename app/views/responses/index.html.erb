@@ -2,13 +2,14 @@
 
 <table>
   <tr>
-    <th></th>
-    <th></th>
-    <th></th>
+    <th>User ID</th>
+    <th>Answer ID</th>
+    <th>Question ID</th>
   </tr>
 
 <% @responses.each do |response| %>
   <tr>
+    <td><%= response.user_id %></td>
     <td><%= response.answer_id %></td>
     <td><%= response.question_id %></td>
     <td><%= link_to 'Show', problem_set_question_response_path(@problem_set.id, params[:question_id], response.id) %></td>

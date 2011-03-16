@@ -5,7 +5,7 @@
   <h3>Questions</h3>
   <ol>
     <% @questions.each do |question| %>
-      <li><%= question.problem %> <%= question.id %></li>
+      <li><%= question.problem %></li>
     <% end %>
   </ol>
 <% else %>
@@ -13,10 +13,11 @@
   <strong><%= link_to 'Add Question', new_problem_set_question_path %></strong>
 <% end %>
 
-<br/>
-<br/>
+<p>
 <% if @questions.size > 0 %>
-<%= link_to 'Begin the problem set', problem_set_question_path(@problem_set.id, @questions[0].count) %> |
+<strong><%= link_to 'Begin the problem set', problem_set_question_path(@problem_set.id, @questions[0].count) %></strong>
 <% end %>
 
+</p>
+<br/>
 <%= render "foot" %>

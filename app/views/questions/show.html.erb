@@ -4,7 +4,27 @@
   <b>Question #<%= @question.count %>:</b>
   <%= @question.problem %><br/>
   <% if session[:user_id] %>
-    <%= render 'form2' %>
+    <% if not @response.id.nil? %>
+      <ol type='a'>
+        <% @answer.each do |a| %>
+          <li><%= a.answer%>
+              <% if a.correct %>
+                <% if @response.answer_id == a.id %>
+                  Correct!
+                <% else %>
+                  <--Correct Answer
+                <% end %>
+              <% else %>
+                <% if @response.answer_id == a.id %>
+                  <-- Your Choice
+                <% end %>
+              <% end %>
+          </li>
+        <% end %>
+      </ol>
+    <% else %>
+      <%= render 'form2' %>
+    <% end %>
   <% else %>
     <%= render 'login_form' %>
   <% end %>

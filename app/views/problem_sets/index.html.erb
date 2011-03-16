@@ -12,7 +12,8 @@
 <% @problem_sets.each do |problem_set| %>
   <tr>
     <td><%= problem_set.title %></td>
-    <td><%= link_to 'Show', problem_set %></td>
+    <td><%= link_to 'Take Quiz', problem_set_questions_path(problem_set) %></td>
+    <td><%= link_to 'About', problem_set %></td>
     <% if session[:user_id].to_i == 126126126126126 %>
       <td><%= link_to 'Edit', edit_problem_set_path(problem_set) %></td>
       <td><%= link_to 'Destroy', problem_set, :confirm => 'Are you sure?', :method => :delete %></td>
