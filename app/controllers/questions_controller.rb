@@ -41,7 +41,7 @@ class QuestionsController < ApplicationController
   # GET /questions/1/edit
   def edit
     @problem_set = ProblemSet.find(params[:problem_set_id])
-    @question = Question.where(:id => params[:id], :problem_set_id => params[:problem_set_id]).first
+    @question = Question.where(:count => params[:id], :problem_set_id => params[:problem_set_id]).first
     @answer = Answer.where(:question_id => params[:id]).all
   end
 
