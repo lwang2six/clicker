@@ -2,28 +2,34 @@ class QuestionsController < ApplicationController
   # GET /questions
   # GET /questions.xml
   def index
-    @questions = Question.where(:problem_set_id => params[:problem_set_id]).all
     @problem_set = ProblemSet.find(params[:problem_set_id])
-
+    if session[:user_id].nil?
+      session[:redirect_url] = problem_set_questions_path(@problem_set)
+      redirect_to(@problem_set)
+    else
+    @questions = Question.where(:problem_set_id => params[:problem_set_id]).all
+    @taken = Response.where(:problem_set_id => @problem_set.id, :user_id => session[:user_id]).size == @questions.size
+    
     respond_to do |format|
       format.html # index.html.erb
       format.xml  { render :xml => @questions }
+    end
     end
   end
 
   # GET /questions/1
   # GET /questions/1.xml
   def show
-      if not session[:user_id]
-        session[:prob_id] = params[:problem_set_id]
-        session[:ques_id] = params[:id]
-      end
+      @problem_set = ProblemSet.find(params[:problem_set_id])
+      if session[:user_id].nil?
+        session[:redirect_url] = "/problem_sets/#{@problem_set.id}/questions/"
+        redirect_to("/login/")
+      else
       @question = Question.where(:problem_set_id => params[:problem_set_id], :count => params[:id]).first
       if @question.nil?
         flash[:notice] = "NO SUCH QUESTION!"
         redirect_to :action=>"index"
       else
-        @problem_set = ProblemSet.find(params[:problem_set_id])
         @answer = Answer.where(:question_id => @question.id).all
         @response = Response.where(:user_id => session[:user_id], :question_id => @question.id).first
         if @response.nil?
@@ -34,6 +40,7 @@ class QuestionsController < ApplicationController
           format.xml  { render :xml => @question }
         end
       end
+    end
   end
 
   # GET /questions/new
@@ -41,19 +48,37 @@ class QuestionsController < ApplicationController
   def new
     @question = Question.new
     @problem_set = ProblemSet.find(params[:problem_set_id])
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @question }
+    if session[:user_id].nil?
+      session[:redirect_url] = "/problem_sets/#{@problem_set.id}/questions/"
+      redirect_to("/login/")
+    else
+      if session[:user_id].to_i != 126126126126126
+        flash[:notice] = "NO PERMISSION!"
+        redirect_to :action => "index"
+      else
+        respond_to do |format|
+          format.html # new.html.erb
+          format.xml  { render :xml => @question }
+        end
+      end
     end
   end
 
   # GET /questions/1/edit
   def edit
     @problem_set = ProblemSet.find(params[:problem_set_id])
-    @question = Question.where(:count => params[:id], :problem_set_id => params[:problem_set_id]).first
-
-    @answer = Answer.where(:question_id => @question.id).all
+    if session[:user_id].nil?
+      session[:redirect_url] = "/problem_sets/#{@problem_set.id}/questions/"
+      redirect_to("/login/")
+    else
+      if session[:user_id].to_i != 126126126126126
+        flash[:notice] = "NO PERMISSION!"
+        redirect_to :action => "index" 
+      else
+        @question = Question.where(:count => params[:id], :problem_set_id => params[:problem_set_id]).first
+        @answer = Answer.where(:question_id => @question.id).all
+      end
+   end
   end
 
   # POST /questions

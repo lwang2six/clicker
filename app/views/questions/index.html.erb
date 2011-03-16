@@ -1,3 +1,4 @@
+<h1 id="notice"><%= notice %><h1>
 <h1> List of Questions</h1>
 <h2> for Problem Set #<%= @problem_set.id %>: <%= @problem_set.title %></h2>
 <br/>
@@ -15,7 +16,11 @@
 
 <p>
 <% if @questions.size > 0 %>
+<% if @taken %>
+<strong><%= link_to 'View Results', "result/" %></strong>
+<% else %>
 <strong><%= link_to 'Begin the problem set', problem_set_question_path(@problem_set.id, @questions[0].count) %></strong>
+<% end %>
 <% end %>
 
 </p>

@@ -48,7 +48,7 @@ Clicker::Application.routes.draw do
 
   # You can have the root of your site routed with "root"
   # just remember to delete public/index.html.
-   root :to => "problem_sets#index"
+   root :to => "problem_sets#login"
 
   # See how all your routes lay out with "rake routes"
 
@@ -67,4 +67,6 @@ Clicker::Application.routes.draw do
 
 
   match "problem_sets/:id/result/" => "problem_sets#result"
+  match "login/" => "problem_sets#login"
+  match "logout/" => "problem_sets#logout"
 end

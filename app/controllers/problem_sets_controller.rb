@@ -3,7 +3,7 @@ class ProblemSetsController < ApplicationController
   # GET /problem_sets.xml
   def index
     @problem_sets = ProblemSet.all
-    if not session[:user_id]
+    if session[:user_id].nil?
       @problem_set = ProblemSet.new
     end
     respond_to do |format|
@@ -16,12 +16,17 @@ class ProblemSetsController < ApplicationController
   # GET /problem_sets/1.xml
   def show
     @problem_set = ProblemSet.find(params[:id])
-    @questions = Question.where(:problem_set_id => @problem_set.id)
-    @question = Question.where(:problem_set_id => @problem_set.id).first
+    if session[:user_id].nil?
+        session[:redirect_url] = problem_set_path(@problem_set)
+        redirect_to :action => "login"
+    else 
+      @questions = Question.where(:problem_set_id => @problem_set.id)
+      @question = Question.where(:problem_set_id => @problem_set.id).first
 
-    respond_to do |format|
-      format.html # show.html.erb
-      format.xml  { render :xml => @problem_set }
+      respond_to do |format|
+        format.html # show.html.erb
+        format.xml  { render :xml => @problem_set }
+      end
     end
   end
 
@@ -47,7 +52,13 @@ class ProblemSetsController < ApplicationController
     @problem_set = ProblemSet.new(params[:problem_set])
     if params[:user_id]
       session[:user_id] = params[:user_id]
-      redirect_to :action => :index
+      if session[:redirect_url].nil?
+        redirect :action => :index
+      else
+        r_to = session[:redirect_url]
+        session[:redirect_url] = nil
+        redirect_to(r_to) 
+      end
     else
       respond_to do |format|
         if @problem_set.save
@@ -89,8 +100,26 @@ class ProblemSetsController < ApplicationController
     end
   end
 
+  #TODO: to be moved when a user model is implemented
+  def login
+    @problem_set = ProblemSet.new
+    @question = Question.new
+    @response = Response.new
+    
+    render :action => "login"
+  end
+  def logout
+    session[:user_id] = nil
+    redirect_to :action => "login"
+  end
+
   def result
     @problem_set = ProblemSet.find(params[:id])
+   if session[:user_id].nil?
+       session[:redirect_url] = "/problem_sets/#{@problem_set.id}/result/"
+        redirect_to :action => "login"
+   else 
+
     questions   = Question.where(:problem_set_id => @problem_set.id).all
     @result = []
     questions.each_with_index do |q, i| 
@@ -109,12 +138,12 @@ class ProblemSetsController < ApplicationController
     #user_id hardcoded, TODO:// create user model 
     if @result[0][:response].nil? && session[:user_id] != '126126126126126'
       respond_to do |format|
-         format.html { redirect_to(problem_set_question_path(@problem_set.id, 1), :notice => "Must take the quiz first to see the results!!!") }
+         format.html { redirect_to(problem_set_questions_path(@problem_set.id), :notice => "Must take the quiz first to see the results!!!") }
       end
     else
       render :action => "result" 
     end
-
+   end
   end
 
 
