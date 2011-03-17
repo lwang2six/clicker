@@ -10,8 +10,10 @@
     <% end %>
   </ol>
 <% else %>
+  <% if session[:user_id].to_i == 126126126126126 %>
   <h3> Please add questions to the problem set!</h3>
   <strong><%= link_to 'Add Question', new_problem_set_question_path %></strong>
+  <% end %>
 <% end %>
 
 <p>
