@@ -8,15 +8,19 @@
   <% r[:answers].each_with_index do |res, i| %>
     <li><%= res.answer %> 
         <% if not r[:response].nil? %>
-          <% if r[:response].answer_id == res.id %>
-            <% if r[:response].result %>
-              Correct!
-            <% else %>
-              Wrong!
-            <% end %>
-          <% end %>
+         <% if res.correct %>
+                <% if r[:response].answer_id == res.id %>
+                  Correct!
+                <% else %>
+                  <--Correct Answer
+                <% end %>
+              <% else %>
+                <% if r[:response].answer_id == res.id %>
+                  <-- Your Choice
+                <% end %>
+              <% end %>
         <% end %>
-    </li> <%= r[:total][i] %><br/>
+    </li> Choosen <%= r[:total][i] %> time(s) total.<br/>
   <% end %>
   </ol>
 <br/>

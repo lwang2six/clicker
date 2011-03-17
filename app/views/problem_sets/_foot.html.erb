@@ -1,10 +1,10 @@
 <% if session[:user_id].to_i == 126126126126126 %>
-  <%= link_to 'New Problem set', new_problem_set_path %> 
+  <%= link_to 'New Problem Set', new_problem_set_path %> 
   <% if @problem_set.id %>
-    | <%= link_to 'Edit', edit_problem_set_path(@problem_set) %> |
+    | <%= link_to 'Edit Problem Set', edit_problem_set_path(@problem_set) %> |
   <% end %>
 <% end %>
 
 <% if @problem_set %>
-  <%= link_to 'Back to Probelm Set listing', problem_sets_path %>
+  <%= link_to 'Back to Probelm Set Listing', problem_sets_path %>
 <% end %>
