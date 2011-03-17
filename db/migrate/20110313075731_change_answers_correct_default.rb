@@ -1,6 +1,6 @@
 class ChangeAnswersCorrectDefault < ActiveRecord::Migration
   def self.up
-    change_column :answers, :correct, :boolean, :default => 0
+    change_column :answers, :correct, :boolean, :default => false
   end
 
   def self.down
