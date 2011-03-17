@@ -34,16 +34,34 @@ class ProblemSetsController < ApplicationController
   # GET /problem_sets/new.xml
   def new
     @problem_set = ProblemSet.new
-
-    respond_to do |format|
-      format.html # new.html.erb
-      format.xml  { render :xml => @problem_set }
+    if session[:user_id].nil?
+      session[:redirect_url] = "/problem_sets/new/"
+      redirect_to("/login/")
+    else
+      if session[:user_id].to_i != 126126126126126
+        flash[:notice] = "NO PERMISSION!"
+        redirect_to :action => "index"
+      else
+        respond_to do |format|
+          format.html # new.html.erb
+          format.xml  { render :xml => @problem_set }
+        end
+      end
     end
   end
 
   # GET /problem_sets/1/edit
   def edit
     @problem_set = ProblemSet.find(params[:id])
+    if session[:user_id].nil?
+      session[:redirect_url] = "/problem_sets/#{@problem_set.id}/questions/edit/"
+      redirect_to("/login/")
+    else
+      if session[:user_id].to_i != 126126126126126
+        flash[:notice] = "NO PERMISSION!"
+        redirect_to :action => "index"
+      end
+    end
   end
 
   # POST /problem_sets
@@ -53,7 +71,7 @@ class ProblemSetsController < ApplicationController
     if params[:user_id]
       session[:user_id] = params[:user_id]
       if session[:redirect_url].nil?
-        redirect :action => :index
+        redirect_to :action => "index"
       else
         r_to = session[:redirect_url]
         session[:redirect_url] = nil

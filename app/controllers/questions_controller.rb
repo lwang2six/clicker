@@ -192,6 +192,7 @@ class QuestionsController < ApplicationController
 
   # DELETE /questions/1
   # DELETE /questions/1.xml
+  #TODO: need to reduce count for problem_set and perhaps reassign the numbers when a question gets removed from the problem set
   def destroy
     @problem_set = ProblemSet.find(params[:problem_set_id])
     @question = Question.where(:id => params[:id], :problem_set_id => params[:problem_set_id]).first
