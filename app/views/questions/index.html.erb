@@ -6,8 +6,8 @@
   <h3>Questions</h3>
   <ol>
     <% @questions.each do |question| %>
-      <li><%= question.problem %></li>
-    <% end %>
+      <li><%= question.problem %>    <%= link_to 'Edit Question', edit_problem_set_question_path(@problem_set.id, question.count) %> | <%= link_to 'Delete Question', [@problem_set, @question], :confirm => 'Are you sure?', :method => :delete %></li>
+    <% end %> 
   </ol>
 <% else %>
   <% if session[:user_id].to_i == 126126126126126 %>
