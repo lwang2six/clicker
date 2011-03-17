@@ -3,12 +3,15 @@ class ProblemSetsController < ApplicationController
   # GET /problem_sets.xml
   def index
     @problem_sets = ProblemSet.all
+    @problem_set = ProblemSet.new
     if session[:user_id].nil?
-      @problem_set = ProblemSet.new
-    end
-    respond_to do |format|
-      format.html # index.html.erb
-      format.xml  { render :xml => @problem_sets }
+        session[:redirect_url] = problem_sets_url
+        redirect_to :action => "login"
+    else 
+      respond_to do |format|
+        format.html # index.html.erb
+        format.xml  { render :xml => @problem_sets }
+      end
     end
   end
 
